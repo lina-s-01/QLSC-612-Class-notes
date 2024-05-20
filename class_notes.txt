@@ -1,0 +1,345 @@
+Intro to Shell
+which shell am I using: echo $0 
+
+printenv: everything that's loaded within bash 
+touch: is to create a file e.g. touch words.txt and you can't edit it there 
+You can then open it with an editor: nano words.txt to be able to edit it 
+overwriting when moving files be careful: mv -i this will ask you first if you are sure you want to 
+move them
+
+grep: if you want to look for a specific word only at the 
+start of the sentence, do: grep "^..." and if you want it at the 
+end of the sentence, do "$..."
+
+14.05.2024
+Git and GitHub 
+Hash: this is like the unique identifier of a file
+
+Staging and commiting: you need to stage first to be able to commit a file 
+Branching and forking: 
+ If you forked a repository, you simply clone the fork. If you branched a repository, 
+ you clone the repository and checkout the branch.
+
+ things to remember: 
+ git status 
+ git add <file> 
+ git commit -m "message" 
+ git push <remote> (branch) 
+
+ 
+ 15.05.2024 
+ numpy 
+ remember it is important to set dtype and allocate relevant space in memory 
+ checking the shape of an array (dimension): 
+ (arrayname).shape
+
+
+ Setting seed: 
+ You can use set.seed
+ but if you are working on python, use np.random.seed
+
+ random number generation: check the random library 
+ you can use: random.random 
+ or random.randint
+ random.reform 
+ Just check what suits you needs
+
+ Pandas: it is entirely built on top of numpy 
+ panda objects is simply an enhanced version of a numpy structured array 
+
+ The series object: one dimensional array of indexed data 
+
+if you give: pd.series it will create series 
+you can feed it list, dictionaries... 
+Making a df from a dictionary: 
+first pd.Series(your dictionary) --> create a df using pd.DataFrame
+Checking index and columns: df.index, df.columns 
+
+rather than dropping columns after reading the csv file you can just intially read the desired columns 
+pd.read_csv(path, usecols=["",""],)
+
+display(your_df())
+you can also do: display(diplay(your_df.head()))
+
+Indexer: loc and iloc 
+explicit index: pd.Series(my_list, index=["", ""]) use Loc 
+implicit index: this is automatically set use iLoc
+
+View: (shallow data)
+it's a view that points to an existing data, we haven't saved a copy we're just working on the original df 
+
+Make a copy of a df: 
+my_df.copy()
+
+FIltering: 
+&, AND: these are different. & you can use in selecting and filtering 
+e.g., query = shapes.loc[(shapes["faces"] > 3) & (shapes["edges"] != 12)]
+AND is used for logical boolean 
+same thing for OR and |
+
+Merging df: 
+you can use: pd.concat but need to first put both df you wanna merge 
+in a list. e.g., df1 df2 
+list= [df1, df2]
+results= pd.concat(list, axis=0)
+here axis=0 means you are merging based on rows so one df on top of the other
+
+Statistics: 
+Groupby: 
+groupby_gender = data.groupby('Gender')
+for gender, value in groupby_gender['VIQ']:
+    print((gender, value.mean()))
+Why does the above work? when you look at len(groupby_gender) it's 2 
+when you put it in the loop, gender will take the first part and value
+will be the second part
+
+Basic stats: 
+inverse survival function (to get the z value)
+
+16.05.2024 
+Machine learning 
+model fitting: loss function = MSE mean square error (variance unexplained by the model)
+loss cause this is based on psychology experiment in terms of reward and loss (high reward and loss)
+
+global mining:  based on your starting point (initial b0 and b1)
+As the model gets more complicated, they approach local minimum 
+
+Regularization: how do we control and regularize the model 
+think about this like a governement regularization, choosing your weights (the ones that make most sense)
+This way we lower the overfitting 
+by modifying the loss function through: Lasso and Ridge FUNDAMENTALS 
+Lasso: your weight is sparse (you loose the variables that are colinear) (some weights i.e., b1 will be 0; similar to feature selection BUT not the same)
+Ridge: your weight gets smaller and smaller (check equation + theta sum of squared beta)
+Always think about your model and data e.g., if you're training your model on pictures, Lasso might not be the best option 
+because in a picture, pixels are highly correlated so Lasso which leads to loss of correlated variables is not suitable
+So the overfitting is lower (MSE is higher)
+
+Model weights and parameters are interchangable terms (weight is a predictor)
+Variables are x1,x2,xi... 
+weights are b0, b1,b2,bi...
+
+shape of data: data features 
+                  features 
+Sample         ---------
+               |
+               |
+               |
+e.g., data 
+x= [[0,0], [1,1]] so here it's 2x2
+y= [0,1]  and this is 2,1 (2 features and 1 sample)
+
+Model evaluation: 
+there is a tradeoff between model variance and bias (leading to errors)
+e.g., of bias: collecting data only in males... 
+
+A way of measuring model complexity: the number of features (the more (uncorrelated) parameters, 
+the more complex your model is)
+
+underfitting more bias (doesn't capture and explain the variance) (MSE>0 high mean square error)
+overfitting more variance (based on the training data: MSE~0)
+
+What's a dummy model: 
+a quick way of checking your model performance 
+it's a model you use intially rather than using the first one
+
+Model evalution: understand the diff between outer and inner loop 
+is there a limit to k-fold: 
+traditionally, the Leave-One-Out method was used 
+e.g., n=20, you train on 19 and leave 1 
+the issues with this is that you are testing on 1 only so you are not averaging 
+across subjects. = AVOID 
+outer loop gives a better estimate of performance 
+Inner loop compares several different model architectures (this is done before the outer loop)
+
+Inner loop = model selection 
+So if you are comparing Lasso, Ridge and linear model (3 models)
+and you have 4 folds (the data splits) and you have 1 hyper-parameter = 12 iterations 
+if you have 4 folds, 10 hyper-parameters = 120 iterations
+
+What are hyperparameters? think about it like baking. After you picked your model,
+hyperparameters can be baking time, temperature.. They can be: decision tree, kernels, 
+number of layers, degree of model (e.g., linear or quadratic)
+
+Performance scores: 
+Based on the prevalence
+if you're model does well in the training set (10% error rate) while the error is 20% when you 
+run it on the validation dataset, this is overfitting = DATASET SHIFT
+
+pop quiz: 
+1% prevalence of COVID - Our aim is to reduce false negative because we wanna lower spread of COVID 
+model accuracy: 91% 
+
+90% sensitivity (probability to predict positive if patient has COVID)
+91% specificity (probability to predict negative if patient does not have COVID)
+
+Exercice 2: 
+confusion matrix: 
+0 and 1 mean what ever you coded your variable 
+e.g., 
+0 is health and 1 is autism 
+if the value is 0 and your model predicts 1, this is false positive
+
+Machine Learning 2: 
+nested-cross validation: check L2 ridge regularization 
+model hyper-parameters is when you pick and change alpha (based either on ridge or lasso)
+
+train --> validate --> test 
+data within each fold are independent
+Refit: after running all iterations of model, you pick the best alpha and you rerun the model
+
+the FUNDAMENTAL in code: 
+model_GS = GridSearchCV(Ridge(), {"alpha": [.1, 1., 10.]}) 
+Or 
+model_GS = RidgeCV(alphas=[.1, 1., 10.]) 	→ more efficient
+
+scores = cross_val_score(model_GS, X, y, cv=5) (outer loop)
+
+When do you change your hyper-parameters? 
+So these parameters are first checked and changed before you run your outer loop 
+Flow: 
+Select different hyper-parameters --> run the inner loop to select the model (ANN, Lasso, Ridge, LR...)
+Then after you're happy with your model and you selected one, run your outer loop 
+CAUTION: running an outer loop then changing your hyper-parameters is double-dipping because you've seen your data 
+it's like changing the hypothesis after seeing the data. 
+
+Unsupervised learning: 
+feature selection: you can drop one or more feature (variable) then you use the selected columns to predict your y variable 
+feature transformation: it takes the intial features and it combines/transforms them. 
+Also called decomposition problem (if it's linear it's called linear decomposition problem): 
+this is the minimization of the loss function 
+e.g., NMF assumes your data is non negative
+
+PCA: what is the minimum to reconstruct my data set 
+maximum number of components possible is the minimum of whatever is the lowerst between n_samples and n_features
+Steps of PCA: 
+1. calculate the covariance matrix of the data 
+2. Compute Eigenvectors and Eigenvalues: within the covariance matrix 
+Eigenvectors: show the important of the features
+The eigenvalues are equal to the variance
+3. Select principal components: sort Eigenvalues in descending order 
+and choose the top-k eigenvalues to form the principle components
+4. Tranform the data from original to a lower dimentionality representation 
+
+Clustering: grouping observations together 
+things to consider: 
+- priors of parameters 
+
+k-means clustering: it aims to choose centroids that minimise the inertia 
+(it is highly recommended to reduce dimentionality before clustering)
+
+Steps: 
+1. initialization:  choosing k random centroids (no prior knowledge)
+2. Assignment step: you assign each k to the closest sample 
+3. Update step: Now that you know the means (centroids) of each samples, you recalculate the centroids again
+ (you continue until it converges)
+
+ Hierarchical clustering: bottom up type algorithm 
+ check the dendrogram (slide 55)
+ Hierarchical because it starts from your samples until the agglomeration of different sample 
+The distance between the samples matters (distance matrix) 
+We don't need samples and their feature values
+
+Steps: 
+from your data matrix --> build the distance matrix (heat map of similarities between your samples) 
+  --> dendogram 
+
+ Distance metrics:
+- Manhattan: Integer features based. The sum of the difference in all the dimensions
+- Hamming distance: binary distance 
+- Correlation (1 - Correlation): no the perfect distance because you have negative values 
+
+How do you assess how well your clustering is? Look at the data 
+internal validation: without comparing it with the true labels (silhouette coefficient) 
+based on the mean distance of a sample with all samples in one cluster and b is the next nearest cluster
+silhouette: intra cluster (imaging 3 cluster: 0, X and U) if cluster 0 has some X or U the distributions overlap 
+
+ARI: inter cluster 
+it looks at the number of agreeing pairs with the labels 
+
+External validation: comparing it with true labels 
+using rand index (RI) and adjusted rand index (ARI) 
+Be careful you have to account for mismatching (sometimes the algorithm clusters them correctly just not how you expected it) 
+
+internal and external validation assess different things. One tells you how well each cluster
+
+Domain knowledge: anatomical features...
+
+You can run AIR before to determine the number of clusters required if you do not know the number of clusters you need 
+
+17.05.2024 
+Data visualisation: 
+Pay attention to the way you present your data
+We're better at judging angles (pie charts) instead of retangles 
+colours to close to each other
+
+Use perception uniform colour map 
+if you have sequential data use sequential coloour map 
+if you have continuous data use diverging colour map 
+if your data is multi-sequential
+
+If you're using a poster use vector graphics 
+JPG: losses data, not recommended for scientific images 
+inscape if you'd like to create a colour
+
+Why are there different ways of coding things on python? e.g., plt.xlabel and ax.set.xlabel
+the first is implicit while the later is explicit (object oriented)
+
+Higher level libraries: 
+seaborn based on matplotlib
+Nilearn (to visualise brain images)
+
+Docker: 
+Do not install dependencies into your system python 
+whenever you work with python, you want to create a virtual environment 
+For each python interpreter make a new virtual environment
+
+Making a virtual environment
+python -m venv name_venv 
+source name_venv/bin/activate 
+
+You have to first activate the virtual env install the dependencies you need 
+Then run your script 
+
+How does a container work? take your computer and creates several other computers
+
+VM: it's a hardware level virtualisation  
+
+You can't move docker env around but you can move docker image around (basically a snapshot of an env)
+
+How to pull and run containers:
+Pull the image: docker pull image_name
+Containers are ran from the images: docker run image_name 
+
+extra: docker ps -a (list of containers that I ran)
+
+Note: the contains does not have access to the outside world! 
+you need to connect the inside (container) to the outside (the host/ i.e., your pc)
+When you created a file within the container you need to make sure it is related to a path 
+relier au container: Mount a Path on the host to a path in the container
+docker run -it -v /absolute_file_path:/file_path_containers
+-it: initialize 
+
+Make sure you write / or ./ before the path (if you are already in the directory where the data/file 
+is just use ./file)
+docker --help 
+
+docker run [option-for-docker] imagename command
+
+e.g., 
+docker pull bids/validator 
+docker run --rm bids/validator --help (--rm removes the container)
+
+ docker run -v ./ds006/:/data:ro bids/validator /data
+ :ro hear :ro means read only on your container 
+ /data here it just a name refering to the container
+
+  Singularity: 
+docker has security risks
+
+LLMs: 
+several parts: 
+Tokenization 
+Embedding 
+Attention 
+Pre-training 
+Transfer learning
